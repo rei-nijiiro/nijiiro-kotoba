@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>虹色のことば</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:    #E8604C;
+    --orange: #F0956A;
+    --yellow: #F5C842;
+    --green:  #6BBF8E;
+    --blue:   #5B9BD5;
+    --indigo: #4A6FA5;
+    --purple: #9B72B0;
+    --bg: #FDFAF5;
+    --text: #2C2416;
+    --text-light: #8C7B6B;
+    --accent: #5B9BD5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 背景装飾 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(91,155,213,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(155,114,176,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 20%, rgba(107,191,142,0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  /* ロゴ・タイトル */
+  .logo {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .logo-rainbow {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  .logo-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+  }
+  .logo-dot:nth-child(1) { background: var(--red);    animation-delay: 0s; }
+  .logo-dot:nth-child(2) { background: var(--orange); animation-delay: 0.2s; }
+  .logo-dot:nth-child(3) { background: var(--yellow); animation-delay: 0.4s; }
+  .logo-dot:nth-child(4) { background: var(--green);  animation-delay: 0.6s; }
+  .logo-dot:nth-child(5) { background: var(--blue);   animation-delay: 0.8s; }
+  .logo-dot:nth-child(6) { background: var(--indigo); animation-delay: 1.0s; }
+  .logo-dot:nth-child(7) { background: var(--purple); animation-delay: 1.2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .logo h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--text);
+  }
+
+  .logo p {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  /* スクリーン */
+  .screen {
+    width: 100%;
+    display: none;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .screen.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 名前入力 */
+  .name-section {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .question-label {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .question-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+
+  .name-input-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .name-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--text-light);
+    padding: 12px 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 18px;
+    color: var(--text);
+    text-align: center;
+    outline: none;
+    letter-spacing: 0.2em;
+    transition: border-color 0.3s;
+  }
+
+  .name-input:focus {
+    border-bottom-color: var(--accent);
+  }
+
+  .name-input::placeholder {
+    color: #ccc;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ボタン */
+  .btn {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 14px 40px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+
+  .btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* 色選択 */
+  .color-section {
+    margin-top: 32px;
+  }
+
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .color-btn {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .color-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .color-btn.selected {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px currentColor;
+  }
+
+  .color-btn span {
+    font-size: 10px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  /* キーワード選択 */
+  .keyword-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .keyword-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: white;
+    border: 1.5px solid #E8E0D8;
+    border-radius: 4px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px;
+    letter-spacing: 0.15em;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .keyword-btn:hover {
+    border-color: var(--selected-color, var(--accent));
+    background: rgba(91,155,213,0.04);
+    transform: translateX(4px);
+  }
+
+  .keyword-btn.selected {
+    border-color: var(--selected-color, var(--accent));
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .keyword-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--selected-color, var(--accent));
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .keyword-btn.selected .keyword-dot {
+    opacity: 1;
+  }
+
+  /* 気持ち選択（3択） */
+  .feeling-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .feeling-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: white;
+    border: 1.5px solid #E8E0D8;
+    border-radius: 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .feeling-btn:hover, .feeling-btn.selected {
+    border-color: var(--selected-color, var(--accent));
+    background: rgba(91,155,213,0.04);
+  }
+
+  /* ナラティブ表示 */
+  .narrative-section {
+    margin-top: 16px;
+  }
+
+  .narrative-card {
+    background: white;
+    border-radius: 8px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .narrative-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow), var(--green), var(--blue), var(--indigo), var(--purple));
+  }
+
+  .narrative-color-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: white;
+  }
+
+  .narrative-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    color: var(--text-light);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .narrative-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 16px;
+    line-height: 2.2;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .narrative-keyword {
+    display: inline-block;
+    font-weight: 600;
+    position: relative;
+  }
+
+  .narrative-keyword::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--selected-color, var(--accent));
+    opacity: 0.5;
+  }
+
+  .narrative-en {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    margin-top: 20px;
+    font-style: italic;
+  }
+
+  /* プログレス */
+  .progress {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #DDD;
+    transition: all 0.3s;
+  }
+
+  .progress-dot.active {
+    background: var(--selected-color, var(--accent));
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  .progress-dot.done {
+    background: var(--selected-color, var(--accent));
+    opacity: 0.4;
+  }
+
+  /* ラッキーアイテム */
+  .lucky-box {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 6px;
+    border: 1px dashed var(--selected-color, var(--accent));
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .lucky-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .lucky-content {}
+
+  .lucky-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .lucky-item {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.1em;
+  }
+
+  .lucky-reason {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 3px;
+    line-height: 1.6;
+  }
+
+  /* CTA */
+  .cta-box {
+    margin-top: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, #F8F4EE, #FDFAF5);
+    border: 1px solid #E8E0D8;
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .cta-box p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+  }
+
+  .cta-box strong {
+    color: var(--text);
+    font-family: 'Shippori Mincho', serif;
+  }
+
+  .btn-outline {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 28px;
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--text);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+
+  .btn-outline:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .btn-retry {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 20px;
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid #DDD;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+
+  .btn-retry:hover { border-color: var(--text-light); color: var(--text); }
+
+  /* ローディング */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    display: none;
+  }
+
+  .loading.active { display: block; }
+
+  .loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .loading-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .loading-dot:nth-child(1) { background: var(--selected-color, var(--blue)); animation-delay: 0s; }
+  .loading-dot:nth-child(2) { background: var(--selected-color, var(--blue)); animation-delay: 0.2s; opacity: 0.7; }
+  .loading-dot:nth-child(3) { background: var(--selected-color, var(--blue)); animation-delay: 0.4s; opacity: 0.4; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+  }
+
+  .loading p {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    color: var(--text-light);
+    letter-spacing: 0.2em;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ロゴ -->
+  <div class="logo">
+    <div class="logo-rainbow">
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+      <div class="logo-dot"></div>
+    </div>
+    <h1>虹色のことば</h1>
+    <p>Nijiiro Kotoba</p>
+  </div>
+
+  <!-- STEP 0: 名前入力 -->
+  <div class="screen active" id="screen-name">
+    <div class="name-section">
+      <p class="question-label">あなたの名前を<br>教えてください</p>
+      <p class="question-sub">— your name —</p>
+      <div class="name-input-wrap">
+        <input class="name-input" type="text" id="nameInput" placeholder="例）れい" maxlength="10">
+      </div>
+      <br>
+      <button class="btn" id="nameBtn" onclick="goToColor()" disabled>はじめる</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: 色選択 -->
+  <div class="screen" id="screen-color">
+    <div class="progress">
+      <div class="progress-dot active" id="p1"></div>
+      <div class="progress-dot" id="p2"></div>
+      <div class="progress-dot" id="p3"></div>
+    </div>
+    <p class="question-label">今の直感で選ぶと、<br>何色ですか？</p>
+    <p class="question-sub">— choose your color —</p>
+    <div class="color-grid" id="colorGrid">
+      <button class="color-btn" style="background:#E8604C;color:#E8604C" onclick="selectColor('red','赤','#E8604C',['静寂','情熱','勇気'])" title="赤">
+        <span>赤</span>
+      </button>
+      <button class="color-btn" style="background:#F0956A" onclick="selectColor('orange','橙','#F0956A',['温もり','創造','活力'])" title="橙">
+        <span>橙</span>
+      </button>
+      <button class="color-btn" style="background:#F5C842" onclick="selectColor('yellow','黄','#F5C842',['喜び','知性','希望'])" title="黄">
+        <span>黄</span>
+      </button>
+      <button class="color-btn" style="background:#6BBF8E" onclick="selectColor('green','緑','#6BBF8E',['調和','成長','癒し'])" title="緑">
+        <span>緑</span>
+      </button>
+      <button class="color-btn" style="background:#5B9BD5" onclick="selectColor('blue','青','#5B9BD5',['静寂','慈悲','表現'])" title="青">
+        <span>青</span>
+      </button>
+      <button class="color-btn" style="background:#4A6FA5" onclick="selectColor('indigo','藍','#4A6FA5',['直感','洞察','深化'])" title="藍">
+        <span>藍</span>
+      </button>
+      <button class="color-btn" style="background:#9B72B0" onclick="selectColor('purple','紫','#9B72B0',['霊性','変容','高貴'])" title="紫">
+        <span>紫</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2: キーワード選択 -->
+  <div class="screen" id="screen-keyword">
+    <div class="progress">
+      <div class="progress-dot done" id="p1b"></div>
+      <div class="progress-dot active" id="p2b"></div>
+      <div class="progress-dot" id="p3b"></div>
+    </div>
+    <p class="question-label" id="keywordQuestion">直感でひとつ<br>選んでください</p>
+    <p class="question-sub">— choose your word —</p>
+    <div class="keyword-grid" id="keywordGrid"></div>
+  </div>
+
+  <!-- STEP 3: 気持ち選択 -->
+  <div class="screen" id="screen-feeling">
+    <div class="progress">
+      <div class="progress-dot done"></div>
+      <div class="progress-dot done"></div>
+      <div class="progress-dot active"></div>
+    </div>
+    <p class="question-label" id="feelingQuestion">今のあなたに<br>近いのはどれですか？</p>
+    <p class="question-sub">— how do you feel —</p>
+    <div class="feeling-grid" id="feelingGrid"></div>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loading">
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+    <p>ことばを紡いでいます…</p>
+  </div>
+
+  <!-- STEP 4: ナラティブ -->
+  <div class="screen" id="screen-narrative">
+    <div class="narrative-section">
+      <div class="narrative-card" id="narrativeCard">
+        <span class="narrative-color-badge" id="narrativeBadge">● 青</span>
+        <p class="narrative-name" id="narrativeName">— for れい —</p>
+        <p class="narrative-text" id="narrativeText"></p>
+        <p class="narrative-en" id="narrativeEn"></p>
+        <div class="lucky-box" id="luckyBox">
+          <div class="lucky-icon" id="luckyIcon">🌿</div>
+          <div class="lucky-content">
+            <p class="lucky-label">Lucky Item</p>
+            <p class="lucky-item" id="luckyItem">ラッキーアイテム</p>
+            <p class="lucky-reason" id="luckyReason"></p>
+          </div>
+        </div>
+      </div>
+      <div class="cta-box">
+        <p>このことばをもっと深く探りたい方へ。<br>
+        <strong>虹色のことば　カラーレッスン</strong>では<br>
+        あなただけのナラティブを丁寧に紡ぎます。</p>
+        <button class="btn-outline">カラーレッスンを見る →</button>
+        <br>
+        <button class="btn-retry" onclick="restart()">もう一度試す</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const state = {
+  name: '',
+  color: '',
+  colorName: '',
+  colorHex: '',
+  keyword: '',
+  feeling: ''
+};
+
+// ナラティブデータ（事前生成）
+const narratives = {
+  blue: {
+    静寂: {
+      a: { text: "静かな水面のように、あなたの内側はいつも多くを映しています。今日あなたが選んだ「静寂」は、逃げ場ではなく、還る場所。ざわめきの向こうに、あなたの声が待っています。", en: "Your stillness is not emptiness — it is everything." },
+      b: { text: "「もっと声に出してもいいのに」と思われているかもしれません。でも、あなたの静かさは強さ。今日は少しだけ、その静けさに自分を委ねてみて。", en: "In your silence, a strength no one else can hold." },
+      c: { text: "静寂の中にいるとき、あなたは最もあなたです。その場所から、一つだけ言葉を持って出てきてください。それがきっと、誰かに届く言葉になります。", en: "From silence, the truest words are born." }
+    },
+    慈悲: {
+      a: { text: "誰かのために心を砕ける人は、自分にも同じ優しさを向けていいのです。今日の「慈悲」は、まず、あなた自身への贈り物として受け取ってください。", en: "You deserve the same kindness you give to others." },
+      b: { text: "あなたの慈悲は涸れません。でも、泉も少しずつ満たす時間が必要です。今日は自分を満たすことを、遠慮なく選んでいい日です。", en: "Fill your own cup first." },
+      c: { text: "「慈悲」を選んだあなたは、すでに誰かの光になっています。それを知らずにいるのが、あなたらしいところ。今日は鏡の前で、自分に微笑んでみて。", en: "You are already someone's light." }
+    },
+    表現: {
+      a: { text: "まだ言葉にならない何かが、あなたの中でゆっくり形を作っています。焦らなくていい。それが完成したとき、世界が少し変わります。あなたの声で。", en: "Your expression changes the world, one word at a time." },
+      b: { text: "「うまく伝えられないな」と感じることがあっても、あなたが伝えようとする姿そのものが、すでに誰かの心を動かしています。", en: "The attempt itself is already beautiful." },
+      c: { text: "表現とは、完璧な言葉を見つけることではありません。今のあなたの形で、今のあなたの声で。それが虹色のことばです。", en: "Express yourself — exactly as you are, right now." }
+    }
+  },
+  red: {
+    静寂: {
+      a: { text: "赤と静寂。一見矛盾するようで、最も深い情熱は沈黙の中に宿ります。あなたの中の炎は、今、静かに燃えている。その熱さを信じてください。", en: "The deepest fire burns in silence." },
+      b: { text: "動き続けた後の静寂は、次の一歩のための準備。今日の「静寂」はあなたへの許可証です。立ち止まっていい、そして深く息を吸って。", en: "Rest is not retreat — it is preparation." },
+      c: { text: "赤の静寂を選んだあなたへ。激しさの中にある凪。嵐の目のように、そこだけ静かな場所があなたには必要です。", en: "Find the eye of your storm." }
+    },
+    情熱: {
+      a: { text: "その情熱、本物です。ためらわなくていい。赤は前へ進む色。今日あなたが感じているその熱さは、間違いなく誰かを照らします。", en: "Your passion is real. Let it lead you forward." },
+      b: { text: "情熱は使うものではなく、聴くもの。あなたの心が燃えている方向に、答えがあります。今日は、その声に従ってみて。", en: "Listen to what sets your soul on fire." },
+      c: { text: "「熱くなりすぎ」と言われることがあっても、その温度があなたの魅力。冷めた世界に、あなたの赤が必要です。", en: "The world needs your fire." }
+    },
+    勇気: {
+      a: { text: "勇気とは恐れがないことではなく、恐れながらも踏み出すこと。今日あなたがここにいること自体が、すでに勇気の証です。", en: "Courage is not the absence of fear." },
+      b: { text: "あなたにはもう、必要な強さが備わっています。赤が教えてくれるのは、それはずっとここにあったということ。", en: "The strength was always yours." },
+      c: { text: "一歩。たった一歩でいい。赤はあなたの背中を押す色。今日、何か一つだけ、勇気を使ってみてください。", en: "One step. That's all it takes today." }
+    }
+  },
+  green: {
+    調和: {
+      a: { text: "緑は自然のバランスを知る色。あなたが「調和」を選んだのは、今の自分に必要なものを知っているから。対立ではなく、流れに乗る日です。", en: "You already know what harmony feels like." },
+      b: { text: "調和とは、全てが同じになることではありません。違いを認めながら、それでも一緒にいられること。あなたはそれが上手です。", en: "Harmony holds differences gently." },
+      c: { text: "あなたがいるだけで、その場の空気が整います。今日もその力を、まず自分自身に使ってあげてください。", en: "Your presence brings peace." }
+    },
+    成長: {
+      a: { text: "芽は地面の下でも育っています。今見えない変化が、確実にあなたの中で起きている。焦らなくていい、緑はゆっくり深く根を張る色。", en: "Growth happens even in the dark." },
+      b: { text: "昨日より少しだけ、あなたは変わっています。それに気づかないのは、あなたが毎日その変化の中にいるから。", en: "You are already more than yesterday." },
+      c: { text: "成長とは上へ伸びることだけではありません。根を広げること、枝を休ませること、季節を待つことも全て成長です。", en: "Every season is part of your growth." }
+    },
+    癒し: {
+      a: { text: "癒しを求めているあなたへ。それは弱さではなく、自分を大切にする知恵。今日は何も生産しなくていい。ただ、ここにいてください。", en: "Healing is not weakness — it is wisdom." },
+      b: { text: "緑の癒しは、急がせません。傷が治るまでの時間を、自分に許してあげてください。あなたのペースで、確かに回復していきます。", en: "Take the time you need. You are healing." },
+      c: { text: "あなたが癒されると、あなたの周りも癒されます。まず自分を満たすことが、最も大きな貢献かもしれません。", en: "Heal yourself first — the world will follow." }
+    }
+  },
+  yellow: {
+    喜び: {
+      a: { text: "喜びは特別な日だけのものではありません。今日の小さな「いいな」を見逃さないで。黄は日常の中に輝きを見つける色。", en: "Joy lives in ordinary moments." },
+      b: { text: "あなたの笑顔は、あなたが思うより多くの人に届いています。今日、誰かのために笑った分、自分のためにも笑って。", en: "Your joy is contagious — share it freely." },
+      c: { text: "「こんなことで喜んでいいのかな」という遠慮は、今日だけ手放してください。喜びに理由はいらない。ただ、感じていい。", en: "You don't need permission to feel joy." }
+    },
+    知性: {
+      a: { text: "あなたの「なぜ？」は才能です。答えよりも問いを大切にすること。黄の知性は、光のように四方に広がっていきます。", en: "Your curiosity is your greatest gift." },
+      b: { text: "知ることを楽しんでいるあなたへ。その探求心が、いつかあなたの言葉を誰かの灯台にします。", en: "Your mind lights the way for others." },
+      c: { text: "頭が良いことと、心が豊かなことは違います。あなたは両方を持っています。今日はその知性を、自分自身の理解のために使ってみて。", en: "Use your intelligence to understand yourself." }
+    },
+    希望: {
+      a: { text: "希望は見えないときも、そこにあります。黄色が雲の向こうにあるように。今日は少しだけ、「うまくいく未来」を想像することを許してください。", en: "Hope exists even when you cannot see it." },
+      b: { text: "あなたが希望を持ち続けることが、周りにとっての希望になっています。その光を、どうか消さないで。", en: "Your hope is someone else's light." },
+      c: { text: "まだ形にならなくていい。ただ「いつか」という感覚を大切に持っていること。それが黄色の贈り物です。", en: "Someday — hold that feeling close." }
+    }
+  },
+  orange: {
+    温もり: {
+      a: { text: "橙の温もりは、無理に作るものではありません。あなたがそこにいるだけで、空気が柔らかくなる。今日もその自然な温かさで、ただいてください。", en: "Your warmth needs no effort — it simply is." },
+      b: { text: "誰かを温めようとする前に、今日は自分を温めてあげて。橙の光のように、まず内側から。", en: "Warm yourself first, then share the light." },
+      c: { text: "あなたの優しさは、言葉より先に伝わっています。その温かさを、今日は自分へのご褒美として受け取ってください。", en: "Your warmth is already a gift to the world." }
+    },
+    創造: {
+      a: { text: "まだ形にならないアイデアが、あなたの中でちゃんと育っています。橙は創造の色。今日、少しだけそのアイデアを紙に出してみて。", en: "Your ideas are already taking shape." },
+      b: { text: "「こんなの誰も興味ないかな」と思っているそのアイデアこそ、世界が待っているものかもしれません。", en: "The world is waiting for your unique creation." },
+      c: { text: "創造とは何もないところから生まれません。あなたの経験、感情、失敗の全てが素材です。今日の橙はその素材を輝かせる色。", en: "Everything you've lived is your creative material." }
+    },
+    活力: {
+      a: { text: "エネルギーが湧かない日もあっていい。橙の活力は、無理に出すものではなく、自然に満ちてくるもの。今日は小さな「好き」から始めて。", en: "Let your energy rise naturally, like morning light." },
+      b: { text: "あなたが動くとき、周りも動きます。その影響力に、もう少し自信を持っていい。", en: "When you move, the world moves with you." },
+      c: { text: "活力は使えばなくなるのではなく、使うことで生まれます。今日、心が動く方向へ一歩踏み出してみて。", en: "Energy grows when you follow your heart." }
+    }
+  },
+  indigo: {
+    直感: {
+      a: { text: "藍の深さは、理由のない確信を知っています。「なんとなく」という感覚を、もっと信頼してください。あなたの直感は、長年の経験の結晶です。", en: "Trust the knowing that has no words." },
+      b: { text: "論理より先に体が知っていることがあります。今日、頭より先に感じた何かに、耳を傾けてみてください。", en: "Your body knows before your mind does." },
+      c: { text: "直感を選んだあなたへ。迷っているとき、すでに答えはあなたの中にあります。静かにしていると、聞こえてきます。", en: "The answer lives within your stillness." }
+    },
+    洞察: {
+      a: { text: "あなたが見ているものを、他の人はまだ見ていません。その視点は才能です。今日気づいたことを、誰かと分かち合ってみて。", en: "You see what others are not yet ready to see." },
+      b: { text: "物事の本質を見抜く力があるあなたへ。その洞察が、誰かの霧を晴らします。", en: "Your insight cuts through the fog for others." },
+      c: { text: "深く見ることは、時に疲れます。今日は少しだけ、表面だけを楽しむことを自分に許してあげて。", en: "Sometimes, it's enough to just see the surface." }
+    },
+    深化: {
+      a: { text: "表面ではなく、根っこへ。藍は深く潜る色。今日あなたが向き合っていることは、きっと大切な何かへつながっています。", en: "Go deeper — the roots are where the truth lives." },
+      b: { text: "深化の過程は、孤独に見えることがあります。でも、その深さに行けるのはあなただけ。そこで見つけたものが、あなたの宝になります。", en: "Only you can go this deep — and bring back treasure." },
+      c: { text: "「まだ足りない」という感覚は、深化しているサイン。あなたは確実に、昨日より深いところにいます。", en: "The feeling of 'not yet' means you are growing." }
+    }
+  },
+  purple: {
+    霊性: {
+      a: { text: "紫を選んだあなたへ。見えないものを感じる力が、あなたには備わっています。今日は少し、日常の奥にある静けさに耳を澄ませてみて。", en: "You sense what cannot be seen." },
+      b: { text: "「なぜか惹かれる」という感覚を大切に。それはあなたの霊性が語りかけているサインかもしれません。", en: "What draws you holds a message." },
+      c: { text: "霊性は特別な人だけのものではありません。美しいものに感動できるあなたは、すでに豊かな霊性を持っています。", en: "Your capacity to feel beauty is your spirituality." }
+    },
+    変容: {
+      a: { text: "蝶は変容の途中、自分が蝶になることを知りません。今あなたが感じている「わからない」は、変容しているサインです。信じて、待って。", en: "You are becoming — even when you cannot see it." },
+      b: { text: "変わることへの恐れは、変わろうとしている証拠。紫の変容は、手放すことから始まります。今日、一つだけ手放してみて。", en: "Let go of one thing today — and see what arrives." },
+      c: { text: "あなたは今、大切な変わり目にいます。紫の時間は、次の自分が生まれるための、美しい準備期間です。", en: "This is your chrysalis — trust the process." }
+    },
+    高貴: {
+      a: { text: "高貴さとは生まれつきのものではなく、自分を大切にする積み重ね。あなたが今日ここにいること、それ自体が品格です。", en: "Dignity is built from how you treat yourself." },
+      b: { text: "「こんな私でいいのかな」という問いに、紫は答えます。あなたはすでに、十分に高貴です。", en: "You are already enough." },
+      c: { text: "自分の価値を他者に決めさせないで。紫はあなたの中にある王権。今日は誰かの基準ではなく、自分の感覚で美しいものを選んで。", en: "Your worth is yours to define." }
+    }
+  }
+};
+
+const feelingOptions = {
+  静寂: ['今は少し、静かな時間が必要', '動きたい気持ちを抑えている', '自然とゆったりしている'],
+  情熱: ['燃えるものが今はっきりある', 'もっと熱くなれる自分でいたい', 'エネルギーは満ちている'],
+  勇気: ['一歩踏み出せない何かがある', '背中を押してほしい気持ち', '今まさに動き始めている'],
+  温もり: ['誰かのぬくもりが恋しい', '自分を温めたい気持ちがある', '今は十分温かさを感じている'],
+  創造: ['アイデアが溢れている', 'ゼロから何かを作りたい', 'もっと自由に表現したい'],
+  活力: ['少し疲れている', 'エネルギーを取り戻したい', '今は力が満ちている'],
+  喜び: ['小さな幸せを感じている', 'もっと喜びを感じたい', '誰かと喜びを分かち合いたい'],
+  知性: ['答えを探している', '好奇心が膨らんでいる', '深く理解したいことがある'],
+  希望: ['未来が少し不安', '希望の光を見つけたい', '前向きな気持ちがある'],
+  調和: ['バランスを取りたい', '今は少し乱れている', '穏やかでいられる'],
+  成長: ['変わりたいと思っている', '成長の手ごたえがある', '焦りを感じている'],
+  癒し: ['心が少し疲れている', 'ゆっくり回復中', '誰かを癒したい'],
+  直感: ['直感に従いたい', '迷っていることがある', '答えは感じている'],
+  洞察: ['本質が見えてきた', 'もっと深く理解したい', '誰かに気づきを伝えたい'],
+  深化: ['もっと深く行きたい', '今は深める時期', 'じっくり向き合いたい'],
+  霊性: ['スピリチュアルなものに惹かれる', '感性が開いている', '静かに感じたいことがある'],
+  変容: ['変わり目を感じている', '手放したいものがある', '新しい自分が生まれそう'],
+  高貴: ['自分を大切にしたい', '自信を取り戻したい', '今の自分が好き'],
+  慈悲: ['誰かを助けたい気持ち', 'まず自分を癒したい', '優しさが溢れている'],
+  表現: ['伝えたいことがある', '言葉が出てこない', 'もっと自由に表現したい']
+};
+
+// ラッキーアイテムデータ
+const luckyItems = {
+  red:    [ { icon:'🕯️', item:'赤いキャンドル',   reason:'情熱の炎を灯して、内なるエネルギーを呼び覚ます' },
+             { icon:'🌹', item:'赤い花',           reason:'生命力の象徴。玄関や窓辺に飾ってみて' },
+             { icon:'🍓', item:'赤い果物',         reason:'イチゴやりんご。食べることで活力を体に取り込んで' } ],
+  orange: [ { icon:'🍊', item:'オレンジ',          reason:'香りを嗅ぐだけで気持ちが開く。創造性を刺激する果物' },
+             { icon:'🧡', item:'オレンジ色のノート',reason:'温もりの色で思いをつづると、言葉が自然と溢れます' },
+             { icon:'🌅', item:'夕焼け写真',        reason:'橙の空を眺めると、心が柔らかくほどけていく' } ],
+  yellow: [ { icon:'🌻', item:'ひまわり',          reason:'太陽のような笑顔で、あなたの喜びを増幅させる' },
+             { icon:'📒', item:'黄色いメモ帳',      reason:'アイデアをすぐ書き留める習慣が、知性を磨く' },
+             { icon:'🍋', item:'レモン',            reason:'フレッシュな香りが思考をクリアにしてくれる' } ],
+  green:  [ { icon:'🌿', item:'観葉植物',          reason:'生きている緑が、あなたの空間に調和と癒しをもたらす' },
+             { icon:'🍵', item:'緑茶',             reason:'一杯の緑茶でリセット。自然の恵みを体に取り込んで' },
+             { icon:'🌲', item:'森や公園の散歩',    reason:'地面を踏みしめることで、大地とつながれる' } ],
+  blue:   [ { icon:'💧', item:'水',               reason:'一杯の水をゆっくり飲んで。青の静けさを体の中へ' },
+             { icon:'📘', item:'青い手帳',          reason:'思いを書くことで、頭の中が整理されていく' },
+             { icon:'🫐', item:'ブルーベリー',      reason:'深い青の実。直感と集中力を高めてくれる' } ],
+  indigo: [ { icon:'🌙', item:'月明かりの時間',    reason:'夜の静けさの中で、直感が研ぎ澄まされていく' },
+             { icon:'📿', item:'ラピスラズリ',      reason:'深い藍色の石。洞察力と内なる知恵を引き出す' },
+             { icon:'🫖', item:'カモミールティー', reason:'深化の時間のお供に。心を落ち着け内側に向かわせる' } ],
+  purple: [ { icon:'💜', item:'アメジスト',        reason:'変容と霊性の石。枕元に置くと直感が豊かになる' },
+             { icon:'🌸', item:'ラベンダー',        reason:'紫の花の香りが、高次の感性を静かに目覚めさせる' },
+             { icon:'🍇', item:'ぶどう',            reason:'深い紫の果実。高貴さとゆとりを体に満たして' } ]
+};
+
+
+document.getElementById('nameInput').addEventListener('input', function() {
+  document.getElementById('nameBtn').disabled = this.value.trim() === '';
+});
+
+document.getElementById('nameInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) goToColor();
+});
+
+function goToColor() {
+  state.name = document.getElementById('nameInput').value.trim();
+  showScreen('screen-color');
+}
+
+function selectColor(colorKey, colorName, colorHex, keywords) {
+  state.color = colorKey;
+  state.colorName = colorName;
+  state.colorHex = colorHex;
+
+  document.documentElement.style.setProperty('--selected-color', colorHex);
+
+  // キーワードリスト構築
+  const grid = document.getElementById('keywordGrid');
+  grid.innerHTML = '';
+  keywords.forEach(kw => {
+    const btn = document.createElement('button');
+    btn.className = 'keyword-btn';
+    btn.innerHTML = `<span class="keyword-dot"></span>${kw}`;
+    btn.onclick = () => selectKeyword(kw, btn);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('keywordQuestion').textContent = `${colorName}のキーワードから\n直感でひとつ選んでください`;
+
+  setTimeout(() => showScreen('screen-keyword'), 300);
+}
+
+function selectKeyword(kw, btn) {
+  document.querySelectorAll('.keyword-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.keyword = kw;
+
+  // 気持ち選択肢
+  const options = feelingOptions[kw] || ['今はほっとしたい', '前に進みたい', '自分を見つめたい'];
+  const grid = document.getElementById('feelingGrid');
+  grid.innerHTML = '';
+  options.forEach(opt => {
+    const fbtn = document.createElement('button');
+    fbtn.className = 'feeling-btn';
+    fbtn.textContent = opt;
+    fbtn.onclick = () => selectFeeling(opt, fbtn);
+    grid.appendChild(fbtn);
+  });
+
+  document.getElementById('feelingQuestion').textContent = `今のあなたに\n近いのはどれですか？`;
+
+  setTimeout(() => showScreen('screen-feeling'), 400);
+}
+
+function selectFeeling(feeling, btn) {
+  document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.feeling = feeling;
+
+  setTimeout(() => showNarrative(), 500);
+}
+
+function showNarrative() {
+  showScreen(null);
+  document.getElementById('loading').classList.add('active');
+
+  setTimeout(() => {
+    document.getElementById('loading').classList.remove('active');
+
+    const colorData = narratives[state.color];
+    const kwData = colorData ? colorData[state.keyword] : null;
+
+    let narrative;
+    if (kwData) {
+      const keys = Object.keys(kwData);
+      // 気持ちのインデックスでパターン選択
+      const feelIdx = document.querySelectorAll('.feeling-btn');
+      let idx = 0;
+      feelIdx.forEach((b, i) => { if (b.classList.contains('selected')) idx = i; });
+      const key = keys[idx % keys.length];
+      narrative = kwData[key];
+    } else {
+      narrative = {
+        text: `${state.name}さん、あなたが選んだ「${state.keyword}」ということばは、今のあなたに必要なメッセージを持っています。その感覚を大切に、今日を過ごしてください。`,
+        en: "Trust the word you chose today."
+      };
+    }
+
+    const badge = document.getElementById('narrativeBadge');
+    badge.style.background = state.colorHex;
+    badge.textContent = `● ${state.colorName}`;
+
+    document.getElementById('narrativeName').textContent = `— for ${state.name} —`;
+
+    const textEl = document.getElementById('narrativeText');
+    const kwSpan = `<span class="narrative-keyword">${state.keyword}</span>`;
+    textEl.innerHTML = narrative.text.replace(new RegExp(`「${state.keyword}」`, 'g'), `「${kwSpan}」`);
+
+    document.getElementById('narrativeEn').textContent = narrative.en;
+
+    // ラッキーアイテム
+    const items = luckyItems[state.color] || luckyItems.green;
+    const lucky = items[Math.floor(Math.random() * items.length)];
+    document.getElementById('luckyIcon').textContent = lucky.icon;
+    document.getElementById('luckyItem').textContent = lucky.item;
+    document.getElementById('luckyReason').textContent = lucky.reason;
+    document.getElementById('luckyBox').style.setProperty('--selected-color', state.colorHex);
+
+    showScreen('screen-narrative');
+  }, 1800);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  if (id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('active');
+      el.style.animation = 'none';
+      requestAnimationFrame(() => { el.style.animation = ''; });
+    }
+  }
+}
+
+function restart() {
+  state.color = '';
+  state.colorName = '';
+  state.colorHex = '';
+  state.keyword = '';
+  state.feeling = '';
+  document.documentElement.style.setProperty('--selected-color', '#5B9BD5');
+  showScreen('screen-name');
+}
+</script>
+</body>
+</html>
